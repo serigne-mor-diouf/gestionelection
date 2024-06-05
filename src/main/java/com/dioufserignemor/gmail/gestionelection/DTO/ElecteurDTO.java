@@ -1,52 +1,31 @@
 package com.dioufserignemor.gmail.gestionelection.DTO;
 
+import com.dioufserignemor.gmail.gestionelection.entites.Civilite;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ElecteurDTO {
-     private Long id;
-     private String name;
-     private String nationalId;
-     private LocalDate dateOfBirth;
-     private String username; 
-     private String password;
+    private Long id;
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getNationalId() {
-        return nationalId;
-    }
-    public void setNationalId(String nationalId) {
-        this.nationalId = nationalId;
-    }
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-   public String getUsername() {
-       return username;
-   }
+    private String nom;
 
-   public void setUsername(String username) {
-       this.username = username;
-   }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private String prenom;
 
+    private String nationalId;
 
+    private LocalDate dateNaissance;
 
+    private Civilite civilite = Civilite.MONSIEUR;
+
+    private String adresse;
+
+    private String telephone;
 }

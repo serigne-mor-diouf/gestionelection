@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CandidatDTO {
+public class RoleDto {
     private Long id;
-    private String name;
-    private String party ;
-    private Long utilisateur ;
+    private String nom;
+    private Set<Long> permissions ;
 }

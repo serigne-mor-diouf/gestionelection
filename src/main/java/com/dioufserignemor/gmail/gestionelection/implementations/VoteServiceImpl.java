@@ -30,10 +30,6 @@ private CandidatRepository candidatRepository  ;
         Electeur electeur = electeurRepository.findById(electeurId)
                 .orElseThrow(() -> new RuntimeException("Électeur non trouvé pour l'ID : " + electeurId));
 
-        // Vérifier si l'électeur a déjà voté
-        if (voteRepository.existsByElecteur(electeur)) {
-            throw new RuntimeException("Cet électeur a déjà voté.");
-        }
 
         // Rechercher le candidat par son ID
         Candidat candidat = candidatRepository.findById(candidatId)
@@ -41,7 +37,7 @@ private CandidatRepository candidatRepository  ;
 
         Vote vote = new Vote();
 
-        vote.setElecteur(electeur);
+        //vote.setElecteur(electeur);
         vote.setCandidat(candidat);
 
         return voteRepository.save(vote);
@@ -64,11 +60,6 @@ private CandidatRepository candidatRepository  ;
         Vote existeVote = voteRepository.findById(voteId)
                 .orElseThrow(() -> new RuntimeException("Vote non trouvé pour l'ID : " + voteId));
         // Mise à jour de l'électeur si le DTO contient un nouvel électeur
-        if (voteDTO.getElecteur() != null) {
-            Electeur newElecteur = electeurRepository.findById(voteDTO.getId())
-                    .orElseThrow(() -> new RuntimeException("Électeur non trouvé pour l'ID : " + voteDTO.getElecteur()));
-            existeVote.setElecteur(newElecteur);
-        }
 
         // Mise à jour du candidat si le DTO contient un nouveau candidat
         if (voteDTO.getCandidat() != null) {

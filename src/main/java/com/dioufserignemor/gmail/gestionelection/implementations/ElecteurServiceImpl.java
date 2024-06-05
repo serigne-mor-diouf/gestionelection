@@ -5,8 +5,6 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.dioufserignemor.gmail.gestionelection.Hasspassword;
 import com.dioufserignemor.gmail.gestionelection.DTO.ElecteurDTO;
 import com.dioufserignemor.gmail.gestionelection.entites.Electeur;
 import com.dioufserignemor.gmail.gestionelection.repositories.ElecteurRepository;
@@ -34,11 +32,11 @@ private ElecteurRepository electeurRepository ;
                 .orElseThrow(() -> new RuntimeException("Électeur non trouvé pour l'ID : " + electeurId));
 
         // Mettre à jour les attributs nécessaires avec les setters
-        existeElecteur.setName(electeurDTO.getName());
+        existeElecteur.setNom(electeurDTO.getNom());
+        existeElecteur.setNom(electeurDTO.getPrenom());
         existeElecteur.setNationalId(electeurDTO.getNationalId());
-        existeElecteur.setDateOfBirth(electeurDTO.getDateOfBirth());
-        existeElecteur.setUsername(electeurDTO.getUsername());
-        existeElecteur.setPassword(electeurDTO.getPassword());
+        existeElecteur.setDateNaissance(electeurDTO.getDateNaissance());
+
         return electeurRepository.save(existeElecteur);
     }
 
@@ -52,10 +50,7 @@ private ElecteurRepository electeurRepository ;
 
     @Override
     public Electeur loginVoter(ElecteurDTO electeurDTO) {
-        String  username = electeurDTO.getUsername();
-        String password = electeurDTO.getPassword();
-        Electeur electeur = electeurRepository.findByUsernameAndPassword(username, password);
-
+        Electeur electeur  = new Electeur();
         if (electeur == null) {
             throw new NoSuchElementException("Électeur non trouvé avec les informations d'identification fournies.");
         }
@@ -65,13 +60,11 @@ private ElecteurRepository electeurRepository ;
 
     @Override
     public Electeur register(ElecteurDTO electeurDTO) {
-        String hash = Hasspassword.genSHAS512(electeurDTO.getPassword());
         Electeur electeur = new Electeur();
-        electeur.setName(electeurDTO.getName());
+        electeur.setNom(electeurDTO.getNom());
+        electeur.setNom(electeurDTO.getPrenom());
         electeur.setNationalId(electeurDTO.getNationalId());
-        electeur.setDateOfBirth(electeurDTO.getDateOfBirth());
-        electeur.setUsername(electeurDTO.getUsername());
-        electeur.setPassword(hash);
+        electeur.setDateNaissance(electeurDTO.getDateNaissance());
 
         return electeurRepository.save(electeur);
     }

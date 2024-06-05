@@ -1,51 +1,53 @@
 package com.dioufserignemor.gmail.gestionelection.entites;
 
+
+import java.util.Collection;
 import java.util.List;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import com.dioufserignemor.gmail.gestionelection.entites.base.Base;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "role")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // par exemple, "ROLE_ELECTOR" ou "ROLE_ADMIN"
+    @Column(name="nom")
+    private String nom;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<Electeur> electeurs;
+    @ManyToMany(mappedBy = "role", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Collection<Utilisateur> utilisateurs;
 
-    //
-    public Role(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    @JsonIgnoreProperties(value = {"role"})
+    @ManyToMany()
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Collection<Permission> permissions;
+
+    public Role(String nom) {
+        this.nom = nom;
     }
 
-    public Long getId() {
-        return id;
+    @PreRemove
+    public void checkReviewAssociationBeforeRemoval() {
+        if (!this.utilisateurs.isEmpty()) {
+            throw new RuntimeException("Vous ne pouvez pas supprimer le rôle [ groupe d'utilisateur car il regroupe des utilisateurs.");
+        }
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Electeur> getElecteurs() {
-        return electeurs;
-    }
-
-    public void setElecteurs(List<Electeur> electeurs) {
-        this.electeurs = electeurs;
-    }
-
-    
 }
